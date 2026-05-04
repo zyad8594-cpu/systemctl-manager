@@ -1,33 +1,69 @@
 # 🐧 Systemd Manager | مدير خدمات النظام الاحترافي
 
-تطبيق **Systemd Manager** هو أداة رسومية احترافية وشاملة لإدارة نظام **systemd** على بيئات Linux. تم تصميمه ليوفر تجربة مستخدم فائقة السلاسة مع دعم كامل لأدق تفاصيل التحكم في الوحدات (Units) والعمليات والنظام بأكمله.
+### [Arabic Below | العربية في الأسفل](#العربية)
+
+**Systemd Manager** is a professional, comprehensive GUI tool for managing the **systemd** ecosystem on Linux. It is designed to provide a premium user experience with granular control over units, processes, and overall system state.
 
 ---
 
-## ✨ المميزات الرئيسية (Core Features)
+## ✨ Key Features (English)
 
-- **🗃️ واجهة بطاقات حديثة (Premium UI)**: عرض الوحدات (Units) بتصميم عصري يعتمد على البطاقات التفاعلية مع دعم كامل للوضع الداكن (Dark Mode).
-- **🛠️ تحكم كامل ودقيق (Full Control)**: بدء، إيقاف، إعادة تشغيل، تمكين، وتعطيل الوحدات بضغطة زر واحدة.
-- **🔗 إدارة الاعتماديات (Dependency Tree)**: عرض شجري (Hierarchical Tree) تفاعلي لجميع اعتماديات الخدمة مع إمكانية الطي والفتح.
-- **🌍 مدير بيئة النظام (Environment Manager)**: واجهة متكاملة لعرض وتعديل وحذف متغيرات بيئة النظام (`systemctl show-environment`) بشكل تفاعلي.
-- **📝 محرر ملفات الخدمة (Unit Editor)**: ميزة تعديل ملفات الوحدات مباشرة وحفظها مع إجراء `Daemon-Reload` تلقائياً.
+- **🌍 Full Internationalization (i18n)**: 100% bilingual interface (Arabic & English). Automatically detects system locale.
+- **🗃️ Premium UI**: Modern card-based layout with full Dark Mode support and responsive design.
+- **🛠️ Granular Control**: Start, Stop, Restart, Enable, Disable, Mask, Unmask, Kill, and Reset-Failed at a touch.
+- **🔗 Dependency Tree**: Foldable, interactive visualization of service hierarchies.
+- **🌍 Environment Studio**: Advanced manager to view, set, and unset system-wide environment variables.
+- **📝 Unit File Editor**: Direct editing of unit files with automatic safe overrides and daemon-reload.
+- **📊 Smart Property Inspector**: Detailed Key-Value tables for unit properties (`systemctl show`) with dynamic modification.
+- **📋 Live Journal Logs**: Real-time log streaming from `journalctl` with extended selection support.
+- **⚡ Bulk Operations**: Intelligent multi-select mode for collective management of dozens of units.
+- **🚀 High Performance**: 100% asynchronous execution engine prevents UI freezing during heavy system operations.
+
+---
+
+## 🚀 Installation
+
+### 1. Developer Setup:
+```bash
+git clone https://github.com/zyad/systemctl-manager.git
+cd systemctl-manager
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Quick CLI Setup (Bash):
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+---
+
+<a name="العربية"></a>
+
+# 🐧 مدير خدمات النظام الاحترافي | Systemd Manager
+
+تطبيق **Systemd Manager** هو أداة رسومية احترافية وشاملة لإدارة نظام **systemd** على بيئات Linux. تم تصميمه ليوفر تجربة مستخدم فائقة السلاسة مع دعم كامل لأدق تفاصيل التحكم في الوحدات والعمليات والنظام بأكمله.
+
+---
+
+## ✨ المميزات الرئيسية (العربية)
+
+- **🌍 دعم عالمي للغات (i18n)**: واجهة كاملة ثنائية اللغة (عربي وإنجليزي) مع التعرف التلقائي على لغة النظام.
+- **🗃️ واجهة بطاقات حديثة (Premium UI)**: عرض الوحدات بتصميم عصري يعتمد على البطاقات التفاعلية مع دعم كامل للوضع الداكن.
+- **🛠️ تحكم كامل ودقيق**: بدء، إيقاف، إعادة تشغيل، تمكين، تعطيل، حجب (Mask)، إلغاء حجب، وإنهاء قسري (Kill).
+- **🔗 إدارة الاعتماديات (Dependency Tree)**: عرض شجري تفاعلي لجميع اعتماديات الخدمة مع إمكانية الطي والفتح.
+- **🌍 مدير بيئة النظام (Environment Studio)**: واجهة متكاملة لعرض وتعديل وحذف متغيرات بيئة النظام بشكل تفاعلي.
+- **📝 محرر ملفات الخدمة (Unit Editor)**: تعديل ملفات الوحدات مباشرة وحفظها عبر نسخ Override آمنة مع إجراء `Daemon-Reload` تلقائياً.
 - **📊 عرض الخصائص الذكي (Smart Properties)**: عرض وتحرير خصائص الوحدات بجداول منظمة (Key-Value) مع دعم لعمليات `set-property`.
 - **📋 سجلات لحظية (Live Logs)**: جلب السجلات من `journalctl` وعرضها في قائمة منظمة وسهلة التصفح.
-- **⚡ عمليات جماعية (Bulk Operations)**: تحديد عدة وحدات في وقت واحد لتنفيذ عمليات التشغيل أو الإيقاف الجماعي.
+- **⚡ عمليات جماعية (Bulk Operations)**: وضع تحديد ذكي لإدارة عشرات الوحدات وتنفيذ العمليات عليها دفعة واحدة.
 - **🚀 أداء غير متزامن (Async Engine)**: تنفيذ جميع أوامر النظام في الخلفية لضمان استجابة الواجهة بنسبة 100%.
 
 ---
 
-## 🛠️ المتطلبات (Requirements)
-
-- **نظام التشغيل**: أي توزيعة Linux تعتمد على `systemd` (مثل Ubuntu, Fedora, Debian, Arch).
-- **اللغة**: Python 3.8 أو أحدث.
-- **المكتبات**: PySide6.
-- **الصلاحيات**: يدعم `pkexec` لطلب صلاحيات الـ Root عند تنفيذ العمليات الحساسة.
-
----
-
-## 🚀 التثبيت (Installation)
+## 🚀 التثبيت
 
 ### 1. تثبيت مشروع المطور:
 ```bash
@@ -38,13 +74,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. التثبيت للنظام (System Install):
-```bash
-python3 setup.py install
-```
-
-### 3. التثبيت السريع (Quick Setup - Bash):
-هذه أسرع طريقة لتثبيت المكتبات وإعداد الاختصار في قائمة التطبيقات:
+### 2. التثبيت السريع (Quick Setup - Bash):
 ```bash
 chmod +x setup.sh
 ./setup.sh
@@ -52,24 +82,9 @@ chmod +x setup.sh
 
 ---
 
-## 🖥️ الاستخدام (Usage)
-
-بعد التثبيت، يمكنك تشغيل التطبيق من قائمة التطبيقات في توزيعتك، أو عبر الأمر التالي:
-```bash
-systemctl-manager
-```
-
----
-
 ## 🏗️ التصميم الهندسي (Architecture)
 
-تم بناء المشروع باستخدام نمط **MVC** (Model-View-Controller) لضمان فصل منطق النظام عن واجهة المستخدم:
-- **Models**: لإدارة بيانات الوحدات وحالتها.
-- **Views**: واجهات رسومية مبنية بـ PySide6 مع ملفات QSS مخصصة.
-- **Controllers**: محرك الربط والتحكم في العمليات والـ Threads.
-- **Services**: طبقة التفاعل المباشر مع أوامر Linux.
-
----
+تم بناء المشروع باستخدام نمط **MVC** (Model-View-Controller) لضمان فصل منطق النظام عن واجهة المستخدم.
 
 ## 📄 الترخيص (License)
 

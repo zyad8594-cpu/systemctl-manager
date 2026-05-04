@@ -18,16 +18,16 @@ class FilterBar(QWidget):
         
         # الصف الأول: البحث
         search_layout = QHBoxLayout()
-        search_label = QLabel("بحث:")
-        search_label.setToolTip("ابحث عن خدمة هنا")
+        search_label = QLabel(self.tr("بحث:"))
+        search_label.setToolTip(self.tr("ابحث عن خدمة هنا"))
         self.search_edit = QLineEdit()
-        self.search_edit.setPlaceholderText("اكتب اسم الخدمة أو الوصف...")
-        self.search_edit.setToolTip("قم بكتابة اسم الخدمة (مثل: apache2) لتصفية النتائج فوراً")
+        self.search_edit.setPlaceholderText(self.tr("اكتب اسم الخدمة أو الوصف..."))
+        self.search_edit.setToolTip(self.tr("قم بكتابة اسم الخدمة (مثل: apache2) لتصفية النتائج فوراً"))
         self.search_edit.textChanged.connect(self.filter_changed.emit)
         
-        type_label = QLabel("نوع الوحدة:")
+        type_label = QLabel(self.tr("نوع الوحدة:"))
         self.type_combo = QComboBox()
-        self.type_combo.addItems(["الكل (All)", "Service", "Socket", "Timer", "Target", "Mount", "Path"])
+        self.type_combo.addItems([self.tr("الكل (All)"), "Service", "Socket", "Timer", "Target", "Mount", "Path"])
         self.type_combo.currentTextChanged.connect(self.type_changed.emit)
         
         search_layout.addWidget(search_label)
@@ -44,12 +44,12 @@ class FilterBar(QWidget):
         self.group.setExclusive(True)
         
         filters = [
-            ("الكل", "all"),
-            ("نشط", "active"),
-            ("متوقف", "inactive"),
-            ("فاشل", "failed"),
-            ("ممكن", "enabled"),
-            ("معطل", "disabled"),
+            (self.tr("الكل"), "all"),
+            (self.tr("نشط"), "active"),
+            (self.tr("متوقف"), "inactive"),
+            (self.tr("فاشل"), "failed"),
+            (self.tr("ممكن"), "enabled"),
+            (self.tr("معطل"), "disabled"),
         ]
         
         for text, cat_id in filters:
@@ -57,7 +57,7 @@ class FilterBar(QWidget):
             btn.setCheckable(True)
             btn.setProperty("cat_id", cat_id)
             btn.setObjectName("FilterChip")
-            btn.setToolTip(f"الفلترة بواسطة: {text}")
+            btn.setToolTip(self.tr("الفلترة بواسطة: {text}").format(text=text))
             if cat_id == "all":
                 btn.setChecked(True)
             

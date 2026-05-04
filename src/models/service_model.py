@@ -3,6 +3,7 @@
 """
 from dataclasses import dataclass
 from typing import Optional
+from PySide6.QtCore import QCoreApplication
 
 @dataclass
 class SystemdService:
@@ -31,11 +32,11 @@ class SystemdService:
     @property
     def status_text(self) -> str:
         if self.is_active:
-            return "يعمل"
+            return QCoreApplication.translate("SystemdService", "يعمل")
         elif self.active_state == "failed":
-            return "فشل"
+            return QCoreApplication.translate("SystemdService", "فشل")
         else:
-            return "متوقف"
+            return QCoreApplication.translate("SystemdService", "متوقف")
     
     @property
     def status_color(self) -> str:

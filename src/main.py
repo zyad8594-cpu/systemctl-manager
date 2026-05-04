@@ -25,6 +25,18 @@ def main():
     controller = AppController()
     view = MainWindow(controller)
     
+    # Internationalization (i18n)
+    from PySide6.QtCore import QTranslator, QLocale
+    translator = QTranslator()
+    # جلب مسار ملفات الترجمة
+    translations_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "translations")
+    locale = QLocale.system().name() # e.g. 'ar_SA' or 'en_US'
+    
+    if translator.load(f"app_{locale}", translations_path):
+        app.installTranslator(translator)
+    elif translator.load(f"app_{locale.split('_')[0]}", translations_path): # Try 'ar' if 'ar_SA' fails
+        app.installTranslator(translator)
+
     # Connecting controller signals to view
     controller.loading_state_changed.connect(view.set_loading_state)
     controller.error_occurred.connect(view.show_error)

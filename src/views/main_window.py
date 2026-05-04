@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
         self.controller = controller
         self.model = controller.model
         self.is_dark_mode = False
-        self.setWindowTitle("مدير خدمات Systemd")
+        self.setWindowTitle(self.tr("مدير خدمات Systemd"))
         self.resize(1000, 800)
         
         # ضبط أيقونة النافذة
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         self.btn_theme_toggle = QPushButton()
         self.btn_theme_toggle.setFixedSize(40, 40)
         self.btn_theme_toggle.setCursor(Qt.PointingHandCursor)
-        self.btn_theme_toggle.setToolTip("تبديل وضع الألوان (فاتح/داكن)")
+        self.btn_theme_toggle.setToolTip(self.tr("تبديل وضع الألوان (فاتح/داكن)"))
         self.btn_theme_toggle.clicked.connect(self.toggle_theme)
         top_bar.addWidget(self.btn_theme_toggle, 0, Qt.AlignTop)
         
@@ -65,13 +65,13 @@ class MainWindow(QMainWindow):
         
         # وصف نوع الوحدة وأدوات التحديد الجماعي
         bulk_layout = QHBoxLayout()
-        self.unit_desc_label = QLabel("الوحدات: جميع الأنواع")
+        self.unit_desc_label = QLabel(self.tr("الوحدات: جميع الأنواع"))
         self.unit_desc_label.setStyleSheet("color: #3498db; font-weight: bold; font-size: 14px;")
         
         self.btn_cancel_multi = QPushButton()
         self.btn_cancel_multi.setIcon(QIcon.fromTheme("go-previous"))
         self.btn_cancel_multi.setFixedSize(30, 30)
-        self.btn_cancel_multi.setToolTip("إلغاء وضع التحديد")
+        self.btn_cancel_multi.setToolTip(self.tr("إلغاء وضع التحديد"))
         self.btn_cancel_multi.clicked.connect(lambda: self.set_multi_select_mode(False))
         self.btn_cancel_multi.hide()
         
@@ -79,12 +79,12 @@ class MainWindow(QMainWindow):
         self.check_select_all.stateChanged.connect(self.toggle_select_all)
         self.check_select_all.hide()
         
-        self.lbl_selection_count = QLabel("محدد: 0")
+        self.lbl_selection_count = QLabel(self.tr("محدد: 0"))
         self.lbl_selection_count.setStyleSheet("color: #e67e22; font-weight: bold; margin: 0 10px;")
         
         self.btn_bulk_options = QPushButton("⋮")
         self.btn_bulk_options.setFixedSize(30, 30)
-        self.btn_bulk_options.setToolTip("الأوامر الجماعية")
+        self.btn_bulk_options.setToolTip(self.tr("الأوامر الجماعية"))
         
         def handle_bulk_action(action_key, display_name):
             if not self.btn_cancel_multi.isVisible():
@@ -124,12 +124,12 @@ class MainWindow(QMainWindow):
         
         # أزرار سفلية سريعة
         bottom_layout = QHBoxLayout()
-        self.btn_refresh = QPushButton(" تحديث القائمة")
+        self.btn_refresh = QPushButton(self.tr(" تحديث القائمة"))
         self.btn_refresh.setIcon(QIcon.fromTheme("view-refresh"))
         self.btn_refresh.clicked.connect(self.controller.refresh_services)
         
-        self.btn_daemon_reload = QPushButton(" تحديث مدير النظام")
-        self.btn_daemon_reload.setToolTip("systemctl daemon-reload")
+        self.btn_daemon_reload = QPushButton(self.tr(" تحديث مدير النظام (Reload)"))
+        self.btn_daemon_reload.setToolTip(self.tr("systemctl daemon-reload"))
         self.btn_daemon_reload.setIcon(QIcon.fromTheme("system-reboot")) # استعارة آيقونة تقريبية
         self.btn_daemon_reload.clicked.connect(self.controller.daemon_reload)
         
@@ -152,32 +152,29 @@ class MainWindow(QMainWindow):
 
     def setup_menu_bar(self):
         menu_bar = self.menuBar()
-        system_menu = menu_bar.addMenu("إدارة النظام (System)")
         
-        actions = [
-            ("بيئة النظام (Environment)", lambda: self.controller.show_environment(), "utilities-terminal"),
-            ("-", None, None),
-            ("إعادة تشغيل (Reboot)", lambda: self.confirm_and_execute_power("reboot", "إعادة تشغيل النظام"), "system-reboot"),
-            ("إيقاف التشغيل (Poweroff)", lambda: self.confirm_and_execute_power("poweroff", "إيقاف تشغيل النظام"), "system-shutdown"),
-            ("سبات (Suspend)", lambda: self.confirm_and_execute_power("suspend", "إسبات النظام"), "system-suspend"),
-            ("إسبات عميق (Hibernate)", lambda: self.confirm_and_execute_power("hibernate", "إسبات عميق للنظام"), "drive-harddisk"),
-            ("-", None, None),
-            ("وضع الطوارئ (Emergency)", lambda: self.confirm_and_execute_power("emergency", "الدخول لوضع الطوارئ"), "dialog-warning"),
-            ("وضع الإنقاذ (Rescue)", lambda: self.confirm_and_execute_power("rescue", "الدخول لوضع الإنقاذ"), "help-browser")
+        view_menu = menu_bar.addMenu(self.tr("عرض"))
+        
+        env_action = QAction(QIcon.fromTheme("preferences-system"), self.tr("بيئة النظام (Environment)"), self)
+        env_action.triggered.connect(self.controller.show_environment)
+        view_menu.addAction(env_action)
+        
+        advanced_action = QAction(QIcon.fromTheme("utilities-terminal"), self.tr("منشئ الأوامر المتقدم"), self)
+        advanced_action.triggered.connect(self.controller.open_advanced_command_builder)
+        view_menu.addAction(advanced_action)
+        
+        system_menu = menu_bar.addMenu(self.tr("النظام"))
+        power_actions = [
+            (self.tr("إعادة التشغيل"), "reboot", "system-reboot"),
+            (self.tr("إيقاف التشغيل"), "poweroff", "system-shutdown"),
+            (self.tr("تعليق (Suspend)"), "suspend", "system-suspend"),
+            (self.tr("سبات (Hibernate)"), "hibernate", "system-suspend-hibernate"),
         ]
         
-        for text, func, icon in actions:
-            if text == "-":
-                system_menu.addSeparator()
-            else:
-                action = QAction(QIcon.fromTheme(icon), text, self)
-                action.triggered.connect(func)
-                system_menu.addAction(action)
-
-        advanced_menu = menu_bar.addMenu("أدوات متقدمة (Advanced)")
-        cmd_builder_action = QAction(QIcon.fromTheme("utilities-terminal"), "باني الأوامر المخصص (Command Builder)", self)
-        cmd_builder_action.triggered.connect(self.controller.open_advanced_command_builder)
-        advanced_menu.addAction(cmd_builder_action)
+        for text, action_key, icon in power_actions:
+            action = QAction(QIcon.fromTheme(icon), text, self)
+            action.triggered.connect(lambda checked, a=action_key, t=text: self.confirm_and_execute_power(a, t))
+            system_menu.addAction(action)
 
     def show_loading(self, show: bool):
         if show:
@@ -188,7 +185,7 @@ class MainWindow(QMainWindow):
     def update_system_status(self):
         status = self.controller.backend.is_system_running()
         self.statusBar.clearMessage()
-        self.statusBar.showMessage(f"حالة النظام: {status.upper()} | إجمالي الوحدات: {len(self.model._filtered_services)}")
+        self.statusBar.showMessage(self.tr("حالة النظام: {status} | إجمالي الوحدات: {count}").format(status=status.upper(), count=len(self.model._filtered_services)))
 
     def toggle_theme(self):
         self.apply_theme(not self.is_dark_mode)

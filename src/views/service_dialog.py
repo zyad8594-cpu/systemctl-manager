@@ -19,7 +19,7 @@ class ServiceDialog(QDialog):
         self.backend = backend
         self.async_runner = AsyncRunner()
         self.logger = setup_logger()
-        self.setWindowTitle(f"تفاصيل الخدمة: {service.name}")
+        self.setWindowTitle(self.tr("تفاصيل الوحدة: {name}").format(name=service.name))
         self.resize(800, 600)
         
         main_layout = QVBoxLayout()
@@ -32,22 +32,22 @@ class ServiceDialog(QDialog):
         # 1. التبويب العام (Info & Logs)
         self.tab_general = QWidget()
         self.setup_general_tab()
-        self.tabs.addTab(self.tab_general, "عام و السجلات")
+        self.tabs.addTab(self.tab_general, self.tr("عام و السجلات"))
         
         # 2. تبويب الخصائص (Properties)
         self.tab_properties = QWidget()
         self.setup_properties_tab()
-        self.tabs.addTab(self.tab_properties, "الخصائص (Properties)")
+        self.tabs.addTab(self.tab_properties, self.tr("الخصائص (Properties)"))
         
         # 3. تبويب ملف الوحدة (Unit File)
         self.tab_unit_file = QWidget()
         self.setup_unit_file_tab()
-        self.tabs.addTab(self.tab_unit_file, "ملف الخدمة (Unit File)")
+        self.tabs.addTab(self.tab_unit_file, self.tr("ملف الخدمة (Unit File)"))
         
         # 4. تبويب الاعتماديات (Dependencies)
         self.tab_dependencies = QWidget()
         self.setup_dependencies_tab()
-        self.tabs.addTab(self.tab_dependencies, "الاعتماديات (Dependencies)")
+        self.tabs.addTab(self.tab_dependencies, self.tr("الاعتماديات (Dependencies)"))
         
         main_layout.addWidget(self.tabs)
         
@@ -56,16 +56,16 @@ class ServiceDialog(QDialog):
         
         actions = []
         if self.service.is_active:
-            actions.append(("إيقاف", "media-playback-stop", "stop_service"))
+            actions.append((self.tr("إيقاف"), "media-playback-stop", "stop_service"))
         else:
-            actions.append(("بدء", "media-playback-start", "start_service"))
+            actions.append((self.tr("بدء"), "media-playback-start", "start_service"))
             
-        actions.append(("إعادة تشغيل", "system-reboot", "restart_service"))
+        actions.append((self.tr("إعادة تشغيل"), "system-reboot", "restart_service"))
         
         if self.service.is_enabled:
-            actions.append(("تعطيل", "process-stop", "disable_service"))
+            actions.append((self.tr("تعطيل"), "process-stop", "disable_service"))
         else:
-            actions.append(("تمكين", "system-run", "enable_service"))
+            actions.append((self.tr("تمكين"), "system-run", "enable_service"))
         
         for text, icon, action_id in actions:
             btn = QPushButton(f" {text}")
@@ -75,7 +75,7 @@ class ServiceDialog(QDialog):
             
         footer_layout.addStretch()
         
-        btn_close = QPushButton("إغلاق")
+        btn_close = QPushButton(self.tr("إغلاق"))
         btn_close.clicked.connect(self.accept)
         btn_close.setFixedWidth(100)
         footer_layout.addWidget(btn_close)
@@ -93,22 +93,22 @@ class ServiceDialog(QDialog):
     def setup_general_tab(self):
         layout = QVBoxLayout(self.tab_general)
         
-        info_group = QGroupBox("معلومات الخدمة")
+        info_group = QGroupBox(self.tr("معلومات الخدمة"))
         form_layout = QFormLayout()
         
-        labels = {
-            "الاسم:": self.service.name,
-            "الوصف:": self.service.description,
-            "الحالة:": self.service.status_text,
-            "تمكين عند الإقلاع:": "ممكن" if self.service.is_enabled else "معطل",
-            "حالة التحميل:": self.service.load_state,
-            "الحالة الفرعية:": self.service.sub_state,
-        }
+        labels = [
+            (self.tr("الاسم:"), self.service.name),
+            (self.tr("الوصف:"), self.service.description),
+            (self.tr("الحالة:"), self.service.status_text),
+            (self.tr("تمكين عند الإقلاع:"), self.tr("ممكن") if self.service.is_enabled else self.tr("معطل")),
+            (self.tr("حالة التحميل:"), self.service.load_state),
+            (self.tr("الحالة الفرعية:"), self.service.sub_state),
+        ]
         
-        for label_text, value in labels.items():
+        for label_text, value in labels:
             val_label = QLabel(value)
             val_label.setStyleSheet("font-weight: normal;")
-            if label_text == "الحالة:":
+            if label_text == self.tr("الحالة:"):
                 val_label.setStyleSheet(f"font-weight: bold; color: {self.service.status_color};")
             
             row_label = QLabel(label_text)
@@ -118,7 +118,7 @@ class ServiceDialog(QDialog):
         info_group.setLayout(form_layout)
         layout.addWidget(info_group)
         
-        logs_group = QGroupBox("آخر السجلات (journalctl)")
+        logs_group = QGroupBox(self.tr("آخر السجلات (journalctl)"))
         logs_layout = QVBoxLayout()
         self.logs_list = QListWidget()
         self.logs_list.setFont(QFont("Monospace", 9))
@@ -130,7 +130,7 @@ class ServiceDialog(QDialog):
         )
         logs_layout.addWidget(self.logs_list)
         
-        btn_refresh_logs = QPushButton(" تحديث السجلات")
+        btn_refresh_logs = QPushButton(self.tr(" تحديث السجلات"))
         btn_refresh_logs.setIcon(QIcon.fromTheme("view-refresh"))
         btn_refresh_logs.clicked.connect(self.load_logs)
         logs_layout.addWidget(btn_refresh_logs)
@@ -142,7 +142,7 @@ class ServiceDialog(QDialog):
         layout = QVBoxLayout(self.tab_properties)
         self.properties_table = QTableWidget()
         self.properties_table.setColumnCount(2)
-        self.properties_table.setHorizontalHeaderLabels(["الخاصية (Key)", "القيمة (Value)"])
+        self.properties_table.setHorizontalHeaderLabels([self.tr("الخاصية (Key)"), self.tr("القيمة (Value)")])
         self.properties_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.properties_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.properties_table.setEditTriggers(QTableWidget.DoubleClicked | QTableWidget.SelectedClicked)
@@ -157,12 +157,12 @@ class ServiceDialog(QDialog):
         layout.addWidget(self.properties_table)
         
         btn_layout = QHBoxLayout()
-        btn_add_prop = QPushButton(" إضافة خاصية جديدة")
+        btn_add_prop = QPushButton(self.tr(" إضافة خاصية جديدة"))
         btn_add_prop.setIcon(QIcon.fromTheme("list-add"))
         btn_add_prop.clicked.connect(self.add_new_property)
         btn_layout.addWidget(btn_add_prop)
         
-        btn_save_props = QPushButton(" حفظ التعديلات على الخصائص (Set-Property)")
+        btn_save_props = QPushButton(self.tr(" حفظ التعديلات على الخصائص (Set-Property)"))
         btn_save_props.setIcon(QIcon.fromTheme("document-save"))
         btn_save_props.clicked.connect(self.save_properties)
         btn_layout.addWidget(btn_save_props)
@@ -176,7 +176,7 @@ class ServiceDialog(QDialog):
         self.unit_file_text.setFont(QFont("Monospace", 10))
         layout.addWidget(self.unit_file_text)
         
-        btn_save_unit = QPushButton(" حفظ التعديلات على ملف الخدمة")
+        btn_save_unit = QPushButton(self.tr(" حفظ التعديلات على ملف الخدمة"))
         btn_save_unit.setIcon(QIcon.fromTheme("document-save"))
         btn_save_unit.clicked.connect(self.save_unit_file_content)
         layout.addWidget(btn_save_unit)
@@ -201,7 +201,7 @@ class ServiceDialog(QDialog):
                     self.logs_list.addItem(line)
             if self.logs_list.count() > 0:
                 self.logs_list.scrollToBottom()
-        def on_error(err): self.logs_list.addItem(f"خطأ: {err}")
+        def on_error(err): self.logs_list.addItem(self.tr("خطأ: {err}").format(err=err))
         self.async_runner.run(fetch, on_finished, on_error)
 
     def show_properties_context_menu(self, pos):
@@ -209,8 +209,8 @@ class ServiceDialog(QDialog):
         if not item: return
         
         menu = QMenu(self)
-        action_edit = menu.addAction(QIcon.fromTheme("document-edit"), "تعديل (Edit)")
-        action_del = menu.addAction(QIcon.fromTheme("edit-delete"), "حذف (Delete)")
+        action_edit = menu.addAction(QIcon.fromTheme("document-edit"), self.tr("تعديل (Edit)"))
+        action_del = menu.addAction(QIcon.fromTheme("edit-delete"), self.tr("حذف (Delete)"))
         
         action = menu.exec(self.properties_table.viewport().mapToGlobal(pos))
         row = item.row()
@@ -225,7 +225,7 @@ class ServiceDialog(QDialog):
             self.properties_table.removeRow(row)
 
     def add_new_property(self):
-        text, ok = QInputDialog.getText(self, "إضافة شخصية جديدة", "أدخل اسم الخاصية (Property Key):")
+        text, ok = QInputDialog.getText(self, self.tr("إضافة شخصية جديدة"), self.tr("أدخل اسم الخاصية (Property Key):"))
         if ok and text:
             row = self.properties_table.rowCount()
             self.properties_table.insertRow(row)
@@ -281,7 +281,7 @@ class ServiceDialog(QDialog):
         
         if not changed:
             from PySide6.QtWidgets import QMessageBox
-            QMessageBox.information(self, "معلومات", "لم تقم بإجراء أي تعديلات على الخصائص.")
+            QMessageBox.information(self, self.tr("معلومات"), self.tr("لم تقم بإجراء أي تعديلات على الخصائص."))
             return
             
         def process(): return self.backend.set_service_properties(self.service.name, changed)
@@ -289,10 +289,10 @@ class ServiceDialog(QDialog):
             success, msg = res
             from PySide6.QtWidgets import QMessageBox
             if success:
-                QMessageBox.information(self, "نجاح", msg)
+                QMessageBox.information(self, self.tr("نجاح"), msg)
                 self.load_properties()
             else:
-                QMessageBox.critical(self, "خطأ (تأكد أن الخاصية تدعم التعديل الديناميكي)", msg)
+                QMessageBox.critical(self, self.tr("خطأ (تأكد أن الخاصية تدعم التعديل الديناميكي)"), msg)
         self.async_runner.run(process, on_finished)
 
     def load_unit_file(self):
@@ -308,9 +308,9 @@ class ServiceDialog(QDialog):
             success, msg = res
             from PySide6.QtWidgets import QMessageBox
             if success:
-                QMessageBox.information(self, "نجاح", msg)
+                QMessageBox.information(self, self.tr("نجاح"), msg)
             else:
-                QMessageBox.critical(self, "خطأ", msg)
+                QMessageBox.critical(self, self.tr("خطأ"), msg)
                 
         self.async_runner.run(process, on_finished)
         
@@ -343,6 +343,6 @@ class ServiceDialog(QDialog):
             self.dependencies_tree.expandAll()
         def on_error(err): 
             self.dependencies_tree.clear()
-            QTreeWidgetItem(self.dependencies_tree, [f"خطأ: {err}"])
+            QTreeWidgetItem(self.dependencies_tree, [self.tr("خطأ: {err}").format(err=err)])
             
         self.async_runner.run(fetch, on_finished, on_error)

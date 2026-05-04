@@ -9,7 +9,7 @@ class EnvironmentDialog(QDialog):
     def __init__(self, env_text: str, backend, parent=None):
         super().__init__(parent)
         self.backend = backend
-        self.setWindowTitle("بيئة النظام (System Environment)")
+        self.setWindowTitle(self.tr("بيئة النظام (System Environment)"))
         self.resize(700, 600)
         
         layout = QVBoxLayout(self)
@@ -17,7 +17,7 @@ class EnvironmentDialog(QDialog):
         # Table
         self.table = QTableWidget()
         self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(["المتغير (Variable)", "القيمة (Value)"])
+        self.table.setHorizontalHeaderLabels([self.tr("المتغير (Variable)"), self.tr("القيمة (Value)")])
         self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.table.setEditTriggers(QTableWidget.DoubleClicked | QTableWidget.SelectedClicked)
@@ -35,19 +35,19 @@ class EnvironmentDialog(QDialog):
         # Buttons
         btn_layout = QHBoxLayout()
         
-        btn_add = QPushButton(" إضافة متغير")
+        btn_add = QPushButton(self.tr(" إضافة متغير"))
         btn_add.setIcon(QIcon.fromTheme("list-add"))
         btn_add.clicked.connect(self.add_variable)
         btn_layout.addWidget(btn_add)
         
-        btn_save = QPushButton(" حفظ التغييرات")
+        btn_save = QPushButton(self.tr(" حفظ التغييرات"))
         btn_save.setIcon(QIcon.fromTheme("document-save"))
         btn_save.clicked.connect(self.save_environment)
         btn_layout.addWidget(btn_save)
         
         btn_layout.addStretch()
         
-        btn_close = QPushButton("إغلاق")
+        btn_close = QPushButton(self.tr("إغلاق"))
         btn_close.clicked.connect(self.accept)
         btn_layout.addWidget(btn_close)
         
@@ -80,8 +80,8 @@ class EnvironmentDialog(QDialog):
         if not item: return
         
         menu = QMenu(self)
-        action_edit = menu.addAction(QIcon.fromTheme("document-edit"), "تعديل (Edit)")
-        action_del = menu.addAction(QIcon.fromTheme("edit-delete"), "حذف (Delete)")
+        action_edit = menu.addAction(QIcon.fromTheme("document-edit"), self.tr("تعديل (Edit)"))
+        action_del = menu.addAction(QIcon.fromTheme("edit-delete"), self.tr("حذف (Delete)"))
         
         action = menu.exec(self.table.viewport().mapToGlobal(pos))
         row = item.row()
@@ -91,7 +91,7 @@ class EnvironmentDialog(QDialog):
             self.table.removeRow(row)
 
     def add_variable(self):
-        text, ok = QInputDialog.getText(self, "إضافة متغير بيئة", "أدخل اسم المتغير (Variable Name):")
+        text, ok = QInputDialog.getText(self, self.tr("إضافة متغير بيئة"), self.tr("أدخل اسم المتغير (Variable Name):"))
         if ok and text:
             row = self.table.rowCount()
             self.table.insertRow(row)
@@ -126,7 +126,7 @@ class EnvironmentDialog(QDialog):
                 to_unset.append(k)
                 
         if not to_set and not to_unset:
-            QMessageBox.information(self, "معلومات", "لم تقم بإجراء أي تعديلات.")
+            QMessageBox.information(self, self.tr("معلومات"), self.tr("لم تقم بإجراء أي تعديلات."))
             return
             
         success_all = True
@@ -136,19 +136,19 @@ class EnvironmentDialog(QDialog):
         for k, v in to_set.items():
             if not self.backend.set_environment_variable(k, v):
                 success_all = False
-                error_msg += f"فشل في ضبط {k}\n"
+                error_msg += self.tr("فشل في ضبط {key}\n").format(key=k)
                 
         # Unset
         for k in to_unset:
             if not self.backend.unset_environment_variable(k):
                 success_all = False
-                error_msg += f"فشل في حذف {k}\n"
+                error_msg += self.tr("فشل في حذف {key}\n").format(key=k)
                 
         if success_all:
-            QMessageBox.information(self, "نجاح", "تم تحديث بيئة النظام بنجاح.")
+            QMessageBox.information(self, self.tr("نجاح"), self.tr("تم تحديث بيئة النظام بنجاح."))
             # Reload to sync with actual system state
             new_env = self.backend.show_environment()
             self.load_data(new_env)
         else:
-            QMessageBox.critical(self, "خطأ", f"حدثت أخطاء أثناء التحديث:\n{error_msg}")
+            QMessageBox.critical(self, self.tr("خطأ"), self.tr("حدثت أخطاء أثناء التحديث:\n{msg}").format(msg=error_msg))
 

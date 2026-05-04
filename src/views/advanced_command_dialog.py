@@ -13,7 +13,7 @@ class AdvancedCommandDialog(QDialog):
         super().__init__(parent)
         self.backend = backend
         self.async_runner = AsyncRunner()
-        self.setWindowTitle("باني الأوامر المتقدم (Advanced Command Builder)")
+        self.setWindowTitle(self.tr("باني الأوامر المتقدم (Advanced Command Builder)"))
         self.resize(700, 600)
         
         main_layout = QVBoxLayout(self)
@@ -21,13 +21,13 @@ class AdvancedCommandDialog(QDialog):
         
         # 1. Target & Action
         target_layout = QHBoxLayout()
-        target_layout.addWidget(QLabel("الوحدة الهدف (Target):"))
+        target_layout.addWidget(QLabel(self.tr("الوحدة الهدف (Target):")))
         self.target_edit = QLineEdit()
-        self.target_edit.setPlaceholderText("مثال: apache2.service")
+        self.target_edit.setPlaceholderText(self.tr("مثال: apache2.service"))
         self.target_edit.textChanged.connect(self.update_command_preview)
         target_layout.addWidget(self.target_edit)
         
-        target_layout.addWidget(QLabel("الأمر (Command):"))
+        target_layout.addWidget(QLabel(self.tr("الأمر (Command):")))
         self.action_combo = QComboBox()
         self.action_combo.addItems([
             "start", "stop", "restart", "reload", "status", 
@@ -39,7 +39,7 @@ class AdvancedCommandDialog(QDialog):
         main_layout.addLayout(target_layout)
         
         # 2. Options Checkboxes
-        options_group = QGroupBox("خيارات متقدمة (Options)")
+        options_group = QGroupBox(self.tr("خيارات متقدمة (Options)"))
         options_layout = QGridLayout(options_group)
         
         self.checkboxes = {
@@ -67,7 +67,7 @@ class AdvancedCommandDialog(QDialog):
         
         # 3. Preview
         preview_layout = QVBoxLayout()
-        preview_layout.addWidget(QLabel("الأمر الذي سيتم إنشاؤه:"))
+        preview_layout.addWidget(QLabel(self.tr("الأمر الذي سيتم إنشاؤه:")))
         self.preview_text = QLineEdit()
         self.preview_text.setReadOnly(True)
         self.preview_text.setFont(QFont("Monospace", 12))
@@ -77,7 +77,7 @@ class AdvancedCommandDialog(QDialog):
         
         # 4. Action Buttons
         btn_layout = QHBoxLayout()
-        self.btn_execute = QPushButton("تنفيذ الأمر المخصص")
+        self.btn_execute = QPushButton(self.tr("تنفيذ الأمر المخصص"))
         self.btn_execute.setStyleSheet("background-color: #e74c3c; color: white; font-weight: bold;")
         self.btn_execute.clicked.connect(self.execute_command)
         btn_layout.addStretch()
@@ -85,7 +85,7 @@ class AdvancedCommandDialog(QDialog):
         main_layout.addLayout(btn_layout)
         
         # 5. Output Log
-        main_layout.addWidget(QLabel("سجل التنفيذ (Output):"))
+        main_layout.addWidget(QLabel(self.tr("سجل التنفيذ (Output):")))
         self.output_text = QTextEdit()
         self.output_text.setReadOnly(True)
         self.output_text.setFont(QFont("Monospace", 10))
@@ -124,8 +124,8 @@ class AdvancedCommandDialog(QDialog):
             if out:
                 self.output_text.append(out)
             if err:
-                self.output_text.append(f"أخطاء: {err}")
-            self.output_text.append(f"رمز الخروج: {code}")
+                self.output_text.append(self.tr("أخطاء: {err}").format(err=err))
+            self.output_text.append(self.tr("رمز الخروج: {code}").format(code=code))
             
             # Scroll to bottom
             scrollbar = self.output_text.verticalScrollBar()

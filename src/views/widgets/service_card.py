@@ -92,54 +92,53 @@ class ServiceCard(QFrame):
         
         # We removed the menu_btn, using ContextMenuEvent instead.
         
-        self.setToolTip(f"خدمة: {service.name}\nانقر بالزر الأيمن لعرض الخيارات، أو نقراً مزدوجاً للتفاصيل")
+        self.setToolTip(self.tr("خدمة: {name}\nانقر بالزر الأيمن لعرض الخيارات، أو نقراً مزدوجاً للتفاصيل").format(name=service.name))
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
         
         # الأساسية
-        menu.addAction(QIcon.fromTheme("edit-select-all"), "تحديد متعدد (Select)").triggered.connect(
+        menu.addAction(QIcon.fromTheme("edit-select-all"), self.tr("تحديد متعدد (Select)")).triggered.connect(
             lambda: self.action_triggered.emit("multi_select", self.service.name)
         )
         menu.addSeparator()
 
-        # أزرار ذكية بناءً على الحالة
         if self.service.is_active:
-            stop_action = menu.addAction(QIcon.fromTheme("media-playback-stop"), "إيقاف")
+            stop_action = menu.addAction(QIcon.fromTheme("media-playback-stop"), self.tr("إيقاف"))
             stop_action.triggered.connect(lambda: self.action_triggered.emit("stop_service", self.service.name))
         else:
-            start_action = menu.addAction(QIcon.fromTheme("media-playback-start"), "بدء")
+            start_action = menu.addAction(QIcon.fromTheme("media-playback-start"), self.tr("بدء"))
             start_action.triggered.connect(lambda: self.action_triggered.emit("start_service", self.service.name))
 
-        restart_action = menu.addAction(QIcon.fromTheme("system-reboot"), "إعادة تشغيل")
+        restart_action = menu.addAction(QIcon.fromTheme("system-reboot"), self.tr("إعادة تشغيل"))
         restart_action.triggered.connect(lambda: self.action_triggered.emit("restart_service", self.service.name))
 
-        reload_action = menu.addAction(QIcon.fromTheme("view-refresh"), "إعادة تحميل")
+        reload_action = menu.addAction(QIcon.fromTheme("view-refresh"), self.tr("إعادة تحميل"))
         reload_action.triggered.connect(lambda: self.action_triggered.emit("reload_service", self.service.name))
 
         menu.addSeparator()
 
         if self.service.is_enabled:
-            disable_action = menu.addAction(QIcon.fromTheme("emblem-unreadable"), "تعطيل")
+            disable_action = menu.addAction(QIcon.fromTheme("emblem-unreadable"), self.tr("تعطيل"))
             disable_action.triggered.connect(lambda: self.action_triggered.emit("disable_service", self.service.name))
         else:
-            enable_action = menu.addAction(QIcon.fromTheme("emblem-ok"), "تمكين")
+            enable_action = menu.addAction(QIcon.fromTheme("emblem-ok"), self.tr("تمكين"))
             enable_action.triggered.connect(lambda: self.action_triggered.emit("enable_service", self.service.name))
 
         menu.addSeparator()
 
         # عمليات متقدمة
-        advanced_menu = menu.addMenu(QIcon.fromTheme("preferences-system"), "عمليات متقدمة")
+        advanced_menu = menu.addMenu(QIcon.fromTheme("preferences-system"), self.tr("عمليات متقدمة"))
         
         advanced_actions = [
-            ("عزل (Isolate)", "isolate_unit", "security-high"),
-            ("تنظيف (Clean)", "clean_unit", "edit-clear"),
-            ("تجميد (Freeze)", "freeze_unit", "media-playback-pause"),
-            ("استئناف (Thaw)", "thaw_unit", "media-playback-start"),
-            ("حجب (Mask)", "mask_service", "security-low"),
-            ("إلغاء حجب", "unmask_service", "security-high"),
-            ("إعادة ضبط الفشل", "reset_failed_service", "edit-clear-all"),
-            ("إنهاء قسري (Kill)", "kill_service", "process-stop"),
+            (self.tr("عزل (Isolate)"), "isolate_unit", "security-high"),
+            (self.tr("تنظيف (Clean)"), "clean_unit", "edit-clear"),
+            (self.tr("تجميد (Freeze)"), "freeze_unit", "media-playback-pause"),
+            (self.tr("استئناف (Thaw)"), "thaw_unit", "media-playback-start"),
+            (self.tr("حجب (Mask)"), "mask_service", "security-low"),
+            (self.tr("إلغاء حجب"), "unmask_service", "security-high"),
+            (self.tr("إعادة ضبط الفشل"), "reset_failed_service", "edit-clear-all"),
+            (self.tr("إنهاء قسري (Kill)"), "kill_service", "process-stop"),
         ]
 
         for text, action_id, icon_name in advanced_actions:
@@ -147,7 +146,7 @@ class ServiceCard(QFrame):
             action.triggered.connect(lambda checked=False, aid=action_id: self.action_triggered.emit(aid, self.service.name))
 
         menu.addSeparator()
-        details_action = menu.addAction(QIcon.fromTheme("utilities-system-monitor"), "تفاصيل")
+        details_action = menu.addAction(QIcon.fromTheme("utilities-system-monitor"), self.tr("تفاصيل"))
         details_action.triggered.connect(lambda: self.details_requested.emit(self.service.name))
 
         menu.exec(event.globalPos())
