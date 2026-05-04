@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Systemd Manager
+Comment=Professional systemd unit and service management suite
+Exec=systemctl-manager
+Icon=systemctl-manager
+Terminal=false
+Type=Application
+Categories=System;Settings;
+Keywords=systemd;systemctl;service;manager;linux;
+StartupNotify=true

@@ -1,0 +1,209 @@
+/* Premium Unified Theme for Systemd Manager (Light Mode Base) */
+
+QMainWindow, QDialog, QWidget {
+    font-family: 'Segoe UI', 'Ubuntu', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+QMainWindow, QDialog {
+    background-color: #f8f9fa;
+}
+
+/* Scroll Area */
+#MainScrollArea, #MainScrollArea > QWidget > QWidget {
+    background-color: transparent;
+    border: none;
+}
+
+/* Service Card Styling */
+#ServiceCard {
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+#ServiceCard:hover {
+    border-color: #3498db;
+    background-color: #fdfefe;
+}
+
+#ServiceName {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+#ServiceDesc {
+    color: #7f8c8d;
+    font-size: 13px;
+}
+
+/* Status Badge */
+#StatusBadge {
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Buttons */
+QPushButton {
+    background-color: #ffffff;
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+QPushButton:hover {
+    background-color: #f1f2f6;
+    border-color: #3498db;
+}
+
+QPushButton:pressed {
+    background-color: #e4e5e9;
+}
+
+/* Menu Button (Three Dots) */
+QPushButton#MenuButton {
+    background-color: transparent;
+    border: none;
+    color: #7f8c8d;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 0;
+}
+
+QPushButton#MenuButton:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    border-radius: 15px;
+}
+
+/* Filter Chips */
+QPushButton#FilterChip {
+    border-radius: 15px;
+    padding: 6px 16px;
+    font-size: 13px;
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    color: #576574;
+}
+
+QPushButton#FilterChip:hover {
+    border-color: #3498db;
+    background-color: #f8fbff;
+    color: #3498db;
+}
+
+QPushButton#FilterChip:checked {
+    background-color: #3498db;
+    color: #ffffff;
+    border-color: #3498db;
+    font-weight: bold;
+}
+
+/* Input Fields */
+QLineEdit {
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    padding: 8px 14px;
+    background-color: #ffffff;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #3498db;
+    background-color: #fdfefe;
+}
+
+/* Group Box & Dialog specifics */
+QGroupBox {
+    font-weight: bold;
+    border: 1px solid #e0e6ed;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    color: #2c3e50;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 10px;
+    left: 10px;
+    color: #34495e;
+}
+
+/* Text Edit (Logs, Properties) */
+QTextEdit {
+    background-color: #2d3436;
+    color: #dfe6e9;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+/* Tabs */
+QTabWidget::pane {
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+QTabBar::tab {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e6ed;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 8px 16px;
+    margin-right: 4px;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+QTabBar::tab:selected {
+    background-color: #ffffff;
+    color: #3498db;
+    font-weight: bold;
+}
+
+QTabBar::tab:hover:!selected {
+    background-color: #f1f2f6;
+    color: #34495e;
+}
+
+/* Status Bar */
+QStatusBar {
+    background-color: #ffffff;
+    color: #7f8c8d;
+    border-top: 1px solid #e0e6ed;
+}
+
+/* QMenu (Dropdowns) */
+QMenu {
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    padding: 6px;
+}
+
+QMenu::item {
+    padding: 8px 30px 8px 20px;
+    border-radius: 6px;
+    color: #2c3e50;
+}
+
+QMenu::item:selected {
+    background-color: #e3f2fd;
+    color: #2980b9;
+    font-weight: 500;
+}
